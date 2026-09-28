@@ -10,19 +10,26 @@ Statusanzeigen oder Pixel-Animationen aus einem Sketch.
 
 ## Installation
 
-Voraussetzungen: ein Raspberry Pi mit einem 128 × 32 SSD1306-OLED an I2C,
-auf dem `oled-websockets` aus
-[Servers_RaspberriPi](https://github.com/ZHdK-Critical-Coding/Servers_RaspberriPi)
-läuft (Port 8200), und ein Browser im selben Netzwerk.
+Voraussetzungen: ein Browser im selben Netzwerk wie der Pi (siehe Server).
 
 Bibliotheken (in `libraries/`): p5.js 1.11.10, p5.sound 1.0.1 (eingebunden,
 nicht verwendet).
 
 Lizenz: MIT
 
+## Server
+
+Braucht `oled-websockets` aus
+[Servers_RaspberriPi](https://github.com/ZHdK-Critical-Coding/Servers_RaspberriPi),
+auf einem Raspberry Pi mit einem 128 × 32 SSD1306-OLED an I2C (I2C in
+`sudo raspi-config` aktivieren), Port 8200. Zuerst mit `bash run.sh` im
+Ordner auf dem Pi starten; das OLED zeigt IP und Port. Er nimmt PNG-Frames
+von genau 128 × 32 an und antwortet nach jedem mit `ok`. Seine Adresse
+oben in `sketch.js` bei `connection` eintragen.
+
 ## Ausführen
 
-1. Den Server auf dem Pi starten. Das OLED zeigt IP-Adresse und Port.
+1. Den Server auf dem Pi starten (siehe Server). Das OLED zeigt IP-Adresse und Port.
 2. Diese Adresse oben in `sketch.js` bei `connection` eintragen, z. B.
    `ws://192.168.2.7:8200`.
 3. Den Ordner in Visual Studio Code öffnen und Live Server starten (in der
