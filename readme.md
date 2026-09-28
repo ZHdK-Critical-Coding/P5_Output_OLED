@@ -1,30 +1,41 @@
-# WebSocket Canvas Streaming
+# P5.js: OLED
 
-Dieses Projekt zeigt, wie man mit **p5.js** Frames von einem Canvas über einen **WebSocket** an einen Server streamt.  
-Dabei werden die Frames als JPEG komprimiert und als Binärdaten verschickt.  
+[Deutsch](README_DE.md)
 
-## Features
+Streams a tiny p5 canvas as PNG frames over a WebSocket to a Raspberry Pi,
+which shows them on a monochrome SSD1306 OLED display. The demo draws a
+white circle moving across a black background inside a frame. A starting
+point for small status displays or pixel animations driven from a sketch.
 
-- Verbindung zu einem WebSocket-Server herstellen
-- Canvas mit p5.js rendern (64 × 16 Pixel, OLED Auflösung)
-- Echtzeit-Streaming der Frames (25 FPS)
-- Empfangsbestätigung `"ok"` vom Server löst den Versand des nächsten Frames aus
+## Installation
 
-## Voraussetzungen
+Requirements: a Raspberry Pi with a 128 × 32 SSD1306 OLED on I2C running
+`oled-websockets` from
+[Servers_RaspberriPi](https://github.com/ZHdK-Critical-Coding/Servers_RaspberriPi)
+(port 8200), and a browser on the same network.
 
-- Browser mit WebSocket-Unterstützung
-- Ein laufender WebSocket-Server unter `ws://192.168.138.96:8100`
+1. Start the server on the Pi. The OLED shows its IP address and port.
+2. Enter that address in `connection` at the top of `sketch.js`, e.g.
+   `ws://192.168.2.7:8200`.
+3. Open the folder in Visual Studio Code and start Live Server (click
+   **Go Live** in the status bar).
+4. The frames are sent as soon as the connection is open.
 
-## Verwendung
+Libraries (in `libraries/`): p5.js 1.11.10, p5.sound 1.0.1 (included, not used).
 
-- Starte den WebSocket-Server.
-- Öffne die HTML-Seite (index.html) mit dem eingebundenen Skript.
-- Das Canvas wird automatisch erstellt, und die Frames werden zum Server gesendet.
+License: MIT
 
-## Beispiel-Animation
+## Coding Help
 
-Die Demo zeigt einen farbigen Kreis, der sich horizontal bewegt
-
-## Lizenz
-
-MIT License
+- **`sketch.js` → `connection`, `crt`**: server address and canvas size
+  (64 × 16). The server does not resize: the PNG must match the OLED
+  (128 × 32). The canvas is exported at the screen's pixel density, so on
+  a Retina screen 64 × 16 becomes 128 × 32. On other screens, set the size
+  to 128 × 32.
+- **`setup()`**: creates the canvas, sets 25 fps and opens the WebSocket.
+  `onopen` sends the first frame, every `ok` from the server triggers the
+  next one.
+- **`sendFrame()`**: encodes the canvas as PNG and sends the bytes. The
+  server converts them to 1 bit, so only black and white make sense.
+- **`draw()`**: black background, a white circle moving left to right and
+  a 1 px frame. Replace this with your own drawing.
